@@ -23,7 +23,9 @@ readUserById(id){
 readUserByLogin(Login){
     return userDB.readObjectByLogin(Login)
 }
-
+readUserByPhone(phone){
+    return userDB.readObjectByPhone(phone);
+}
 readUserByParol(Parol){
     return userDB.readObjectByParol(Parol);
 }

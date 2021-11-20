@@ -5,7 +5,7 @@ const fileUpload = require("express-fileupload");
 const path = require("path")
 const userDB = require("./user").userData;
 const workDB = require("./work").workData;
-
+const processWorkDB = require("./processWork").processWork;
 app.use(fileUpload()) ;
 app.use(express.static(path.join("data", "images", "userImages")))
 app.use(express.static(path.join("data", "images", "workImages")))
@@ -36,6 +36,10 @@ app.post("/readUserById", (req, res)=>{
 
 app.post("/readUserByLogin", (req, res)=>{
     res.send(userDB.readUserByLogin(req.body.login)||"Bunday Loginga ega foydalanuvchi topilmadi");
+})
+
+app.post("/readUserByPhone", (req, res)=>{
+    res.send(userDB.readUserByPhone(req.body.phone)||undefined);
 })
 
 app.post("/readUserByPassword", (req, res)=>{
@@ -95,6 +99,21 @@ app.post("/addWork", (req, res, next)=>{
         res.download(filePath)
 
     });
+
+
+    // Get works by userID and Work ID;
+    app.post("/getAllProcessingWorks", (req,res)=>{
+        res.send(processWorkDB.takeAllProcessingWorks()||"Jarayondagi ishlar mavjud emas");
+    })
+
+    app.post("/getProcessingWorkOfUser", (req,res)=>{
+        res.send(processWorkDB.takeOneUserProcessWorkById(req.body.userId)||"Jarayondagi ishlari mavjud emas");
+    })
+    app.post("/addWorkToProcess", (req,res)=>{
+        res.send(processWorkDB.addWorkProcess(req.body.userId, req.body.workId));
+    })
+
+
 
 
     let listener =app.listen(process.env.PORT||4000, ()=>{

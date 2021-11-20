@@ -61,6 +61,15 @@ readObjectById(Id){
         return undefined;
     }
 }
+// Read Object by phone
+readObjectByPhone(phone){
+    try {
+        return jfs.readFileSync(this.fileName)
+        .filter(({phone1, phone2})=>phone1==phone||phone2==phone)[0];
+    } catch (error) {
+        return undefined;
+    }
+}
 // Login bo'yicha olish
 readObjectByLogin(Login){
     try {
@@ -156,7 +165,25 @@ fs.renameSync(dataPath, path.join("data", "old data of "+path.parse(dataPath).na
 }
 
 
+allGetetWork(){
+    return fs.existsSync(this.fileName)?jfs.readFileSync(this.fileName) :undefined;
 }
+
+getWork(userId, workId){
+let d = this.allGetetWork();
+d.push({userId:userId, workId:workId})
+jfs.writeFileSync(this.fileName, d, {spaces:" ", flag: "w"});
+return d;
+
+}
+getUsersWorkById(userId){
+    return fs.existsSync(this.fileName)?jfs.readFileSync(this.fileName).filter(({userId})=>userId==userId):undefined; 
+}
+
+
+
+}
+
 
 
 
